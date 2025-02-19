@@ -61,9 +61,9 @@ def user_login(request):
         login(request, user)
         return HttpResponseRedirect('/')
       else:
-        return HttpResponse('This account is disabled')
+        return render(request, 'error.html', {'error_message': 'This account is disabled.'})
     else:
-      return HttpResponse('Invalid Login')
+      return render(request, 'error.html', {'error_message': 'Invalid login.'})
 
   else:
     return render(request, 'users/login.html', {})
