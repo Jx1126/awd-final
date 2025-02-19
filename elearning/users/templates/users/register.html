@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+</head>
+<body>
+  <h1>Regiser</h1>
+
+  {% if registered %}
+    <strong>Registered successfully</strong>
+  {% else %}
+    <strong>Register</strong>
+    <form id="user_form" method="POST" action="/user/register" enctype="multipart/form-data">
+      {% csrf_token %}
+      <strong>Account setup</strong>
+      {{ user_form.as_p }}
+      <strong>Profile setup</strong>
+      {{ profile_form.as_p }}
+      <button type="submit">Register</button>
+    </form>
+  {% endif %}
+</body>
+</html>
