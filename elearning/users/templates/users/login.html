@@ -5,6 +5,13 @@
 {% block content %}
   <h1>Login</h1>
 
-  
+  <form id="login_form" method="POST" action="/user/login/">
+    {% csrf_token %}
 
+    Username: <input type="text" name="username" /><br />
+    Password: <input type="password" name="password" /><br />
+
+    {{ login_form.as_p }}
+    <button type="submit">Login</button>
+  </form>
 {% endblock %}

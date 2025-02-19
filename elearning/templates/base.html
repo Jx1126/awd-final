@@ -7,8 +7,14 @@
 </head>
 <body>
   
-  <a href="/user/register">Register</a>
-  <a href="/user/login">Login</a>
+  
+  {% if user.is_authenticated %}
+  
+  {% else %}
+    <a href="/user/register/">Register</a>
+    <a href="/user/login/">Login</a>
+
+  {% endif %}
 
   <main>
     {% block content %}{% endblock %}
