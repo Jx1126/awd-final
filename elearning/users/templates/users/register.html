@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-</head>
-<body>
-  <h1>Regiser</h1>
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <h1>Register</h1>
 
   {% if registered %}
     <strong>Registered successfully</strong>
@@ -21,5 +18,4 @@
       <button type="submit">Register</button>
     </form>
   {% endif %}
-</body>
-</html>
+{% endblock %}
