@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 def user_register(request):
   registered = False
@@ -67,7 +68,8 @@ def user_login(request):
 
   else:
     return render(request, 'users/login.html', {})
-  
+
+@login_required
 def user_logout(request):
   logout(request)
   return HttpResponseRedirect('/')
