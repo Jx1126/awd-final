@@ -9,6 +9,7 @@
   
   
   {% if user.is_authenticated %}
+    <a href="/user/home/">Home</a>
     <a href="/user/logout/">Logout</a>
   {% else %}
     <a href="/user/register/">Register</a>

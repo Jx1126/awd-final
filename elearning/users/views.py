@@ -60,7 +60,7 @@ def user_login(request):
     if user:
       if user.is_active:
         login(request, user)
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/user/home/')
       else:
         return render(request, 'error.html', {'error_message': 'This account is disabled.'})
     else:
@@ -72,4 +72,14 @@ def user_login(request):
 @login_required
 def user_logout(request):
   logout(request)
-  return HttpResponseRedirect('/')
+  return HttpResponseRedirect('/user/login/')
+
+@login_required
+def homepage(request):
+  # Renders the homepage based on the user's role
+  if request.user.appuser.is_student:
+    return render(request, 'users/student_homepage.html', {})
+  elif request.user.appuser.is_teacher:
+    return render(request, 'users/teacher_homepage.html', {})
+  else:
+    return render(request, 'error.html', {'error_message': 'Please log in to view this page.'})
