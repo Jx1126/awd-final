@@ -1,12 +1,19 @@
+{% load compress %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}eLearning Platform{% endblock %}</title>
+
+  {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+  {% endcompress %}
+
 </head>
 <body>
-  
   
   {% if user.is_authenticated %}
     <a href="/user/home/">Home</a>
