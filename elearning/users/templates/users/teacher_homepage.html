@@ -3,8 +3,34 @@
 {% block title %}Student's Homepage{% endblock %}
 
 {% block content %}
-  <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-3xl">Teacher's Homepage</h2>
-  <h1 class="mb-4 text-2xl font-extrabold text-gray-900 md:text-4xl lg:text-5xl">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">{{ user.username }}!</span></h1>
-  <p class="mb-3 text-lg text-gray-500 dark:text-gray-400">You are logged in as a teacher.</p>
+  {% comment %} Page title section {% endcomment %}
+  <section class="mt-5 mb-15">
+    <div class="flex justify-center">
+      <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Teacher's Homepage</h2>
+    </div>
+    <h1 class="mb-3 text-2xl font-extrabold text-gray-900 md:text-4xl lg:text-5xl">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">{{ user.username }}!</span></h1>
+    <p class="ml-5 text-lg text-gray-500 dark:text-gray-400">You are logged in as a teacher.</p>
+  </section>
+
+  {% comment %} Search for a user section {% endcomment %}
+  <section class="mb-15">
+    <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Search for a User</h2>
+    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Search</button>
+  </section>
+
+  {% comment %} Create courses section {% endcomment %}
+  <section class="mb-15">
+    <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Create a Course</h2>
+    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Create</button>
+  </section>
+  
+  {% comment %} Teacher's courses section {% endcomment %}
+  <section class="mb-15">
+    <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Your Courses</h2>
+  </section>
+
+  <section class="mb-15">
+    <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Enrolled Courses</h2>
+  </section>
 
 {% endblock %}
