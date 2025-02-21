@@ -76,10 +76,28 @@ def user_logout(request):
 
 @login_required
 def homepage(request):
+  status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
+
+  if request.method == 'POST':
+    status_form = UserStatusUpdateForm(request.POST)
+    if status_form.is_valid():
+      status = status_form.save(commit=False)
+      status.user = request.user
+      status.save()
+      return HttpResponseRedirect('/user/home/')
+
+  else:
+    status_form = UserStatusUpdateForm()
+
   # Renders the homepage based on the user's role
-  if request.user.appuser.is_student:
-    return render(request, 'users/student_homepage.html', {})
-  elif request.user.appuser.is_teacher:
-    return render(request, 'users/teacher_homepage.html', {})
+  try:
+    app_user = AppUser.objects.get(user=request.user) 
+  except AppUser.DoesNotExist:
+    return render(request, 'error.html', {'error_message': 'User not found.'})
+
+  if app_user.is_student:
+    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form})
+  elif app_user.is_teacher:
+    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form})
   else:
     return render(request, 'error.html', {'error_message': 'Please log in to view this page.'})

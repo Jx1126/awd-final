@@ -12,6 +12,32 @@
     <p class="ml-5 text-lg text-gray-500 dark:text-gray-400">You are logged in as a teacher.</p>
   </section>
 
+  {% comment %} User status section {% endcomment %}
+  <section class="mb-15">
+    <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Status Update</h2>
+
+    {% if status_list %}
+      <div class="space-y-4">
+        {% for status in status_list %}
+          <div>
+            <p>{{ status.status_content }}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ status.time_posted }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+        <p class="text-gray-500 dark:text-gray-400">No status updates yet.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <form method="POST" action="/user/home/">
+      {% csrf_token %}
+      {{ status_form.as_p }}
+      <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Add Status</button>  
+    </form>
+  </section>
+
   {% comment %} Search for a user section {% endcomment %}
   <section class="mb-15">
     <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Search for a User</h2>

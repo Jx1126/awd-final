@@ -20,3 +20,8 @@ class UserProfileForm(forms.ModelForm):
   class Meta:
     model = AppUser
     fields = ('real_name', 'user_role', 'bio')
+
+class UserStatusUpdateForm(forms.ModelForm):
+  class Meta:
+    model = UserStatusUpdate
+    fields = ['status_content']
