@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'compressor',
+    'widget_tweaks',
     'rest_framework',
     'channels',
     'courses',
