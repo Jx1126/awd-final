@@ -24,4 +24,4 @@ class UserProfileForm(forms.ModelForm):
 class UserStatusUpdateForm(forms.ModelForm):
   class Meta:
     model = UserStatusUpdate
-    fields = ['status_content']
+    fields = ['status_title', 'status_content']
