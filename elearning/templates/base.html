@@ -13,7 +13,7 @@
   {% endcompress %}
 
 </head>
-<body>
+<body class="bg-white">
   
   {% if user.is_authenticated %}
     <a href="/user/home/">Home</a>
@@ -24,9 +24,13 @@
 
   {% endif %}
 
-  <main class="mx-8">
+  <main class="mx-10 sm:mx-24 md:mx-36 lg:mx-48">
     {% block content %}{% endblock %}
   </main>
+
+  {% compress js %}
+    <script src="{% static 'js/flowbite.min.js' %}"></script>
+  {% endcompress %}
 
 </body>
 </html>
