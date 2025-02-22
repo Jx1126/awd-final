@@ -2,7 +2,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,6 +80,12 @@
     {% block content %}
     {% endblock %}
   </main>
+
+  
+
+  <footer class="bg-white rounded-lg shadow-sm mx-10 mb-5 sm:mx-24 md:mx-36 lg:mx-48 flex items-center justify-center">
+    <span class="text-sm text-gray-500 sm:text-center p-5">© 2025 <a href="https://github.com/Jx1126" class="hover:underline">Wong Jin Xuan</a>. All Rights Reserved.</span>
+  </footer>
 
   {% comment %} Flowbite Javascripts {% endcomment %}
   {% compress js %}

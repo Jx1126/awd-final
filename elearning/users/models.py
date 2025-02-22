@@ -10,7 +10,7 @@ class AppUser(models.Model):
 
 class UserStatusUpdate(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='status_list')
-  status_title = models.CharField(max_length=150, default="Untitled Status")
+  status_title = models.CharField(max_length=150, null=True, blank=True)
   status_content = models.TextField()
   time_posted = models.DateTimeField(auto_now_add=True)
 
