@@ -13,6 +13,7 @@
   {% endcompress %}
 
 </head>
+
 <body class="bg-white">
 
   {% comment %} Toast Messages {% endcomment %}
@@ -60,13 +61,44 @@
   {% endif %}
   
   {% if user.is_authenticated %}
-    <a href="/user/home/">Home</a>
-    <a href="/user/logout/">Logout</a>
+    <header>
+      <nav class="bg-white/50 border-gray-200 px-4 lg:px-6 py-2.5 mx-10 sm:mx-24 md:mx-36 lg:mx-48 shadow-sm rounded-lg mt-5">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+          <a href="/user/home/" class="flex items-center">
+            <span class="self-center text-xl font-semibold whitespace-nowrap">eLearn</span>
+          </a>
+          <div class="flex items-center lg:order-2">
+            <a href="/user/logout/" class="px-5 py-3 me-2 text-sm font-medium text-white bg-red-600/80 shadow-lg ease-in-out transition shadow-red-400/70 rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-300 focus:outline-none">Log out</a>
+            <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mobile-menu-2" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+              <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.wcl3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
   {% else %}
-    <a href="/user/register/">Register</a>
-    <a href="/user/login/">Login</a>
-
+    <header>
+      <nav class="bg-white/50 border-gray-200 px-4 lg:px-6 py-2.5 mx-10 sm:mx-24 md:mx-36 lg:mx-48 shadow-sm rounded-lg mt-5">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+          <a href="/user/home/" class="flex items-center">
+            <span class="self-center text-xl font-semibold whitespace-nowrap">eLearn</span>
+          </a>
+          <div class="flex items-center lg:order-2">
+            <a href="/user/login/" class="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm me-2 lg:px-5 py-3 px-5 lg:py-2.5 mr-2 focus:outline-none">Log in</a>
+            <a href="/user/register/" class="px-5 py-3 me-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow-lg ease-in-out transition shadow-blue-400/70 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none">Get started</a>
+            <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="mobile-menu-2" aria-expanded="false">
+              <span class="sr-only">Open main menu</span>
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+              <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
   {% endif %}
+
 
   {% comment %} Background Blobs {% endcomment %}
   <div class="fixed inset-0 -z-10 overflow-hidden">
@@ -81,9 +113,7 @@
     {% endblock %}
   </main>
 
-  
-
-  <footer class="bg-white rounded-lg shadow-sm mx-10 mb-5 sm:mx-24 md:mx-36 lg:mx-48 flex items-center justify-center">
+  <footer class="bg-white/50 rounded-lg shadow-sm mx-10 mb-5 sm:mx-24 md:mx-36 lg:mx-48 flex items-center justify-center">
     <span class="text-sm text-gray-500 sm:text-center p-5">© 2025 <a href="https://github.com/Jx1126" class="hover:underline">Wong Jin Xuan</a>. All Rights Reserved.</span>
   </footer>
 

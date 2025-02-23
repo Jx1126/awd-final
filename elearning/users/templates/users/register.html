@@ -36,9 +36,9 @@
             <label class="block mb-2 text-sm font-medium text-gray-900">User Role</label>
               <div class="flex flex-row gap-3">
                 {% for radio in profile_form.user_role %}
-                  <div class="flex w-full items-center ps-4 border border-gray-200 rounded-sm">
+                  <div class="flex w-full items-center ps-4 border border-gray-200 rounded-sm hover:cursor-pointer hover:border-blue-500 transition ease-in-out">
                     {{ radio.tag }}
-                    <label for="{{ radio.id_for_label }}" class="w-full py-4 ms-2 text-sm font-medium text-gray-900">{{ radio.choice_label }}</label>
+                    <label for="{{ radio.id_for_label }}" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 hover:cursor-pointer  ">{{ radio.choice_label }}</label>
                   </div>
                 {% endfor %}
               </div>
