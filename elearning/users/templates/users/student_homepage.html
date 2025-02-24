@@ -102,6 +102,56 @@
       {% comment %} Enrolled courses section {% endcomment %}
       <section id="enrolled_courses" class="mb-15">
         <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Enrolled Courses</h2>
+        <div class="relative overflow-x-auto shadow-md mt-5 sm:rounded-lg">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+            <thead class="text-sm text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-5">
+                  Course Name
+                </th>
+                <th scope="col" class="px-6 py-5">
+                  Teacher
+                </th>
+                <th scope="col" class="px-6 py-5">
+                  Total Enrolls
+                </th>
+                <th scope="col" class="py-5">
+                  View
+                </th>
+                <th scope="col" class="py-5">
+                  Unenroll
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if enrolled_courses %}
+                {% for course in enrolled_courses %}
+                  <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                    <th scope="row" class="px-6 py-5 font-medium text-gray-900 whitespace-nowrap">
+                      {{ course.course_title }}
+                    </th>
+                    <td class="px-6 py-5">
+                      {{ course.created_by.user.username }}
+                    </td>
+                    <td class="px-6 py-5">
+                      {{ course.enrolled_students.count }}
+                    </td>
+                    <td class="py-5">
+                      <a href="{% url 'enroll_course' course.id %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">View</a>
+                    </td>
+                    <td class="py-5">
+                      <a href="{% url 'unenroll_course' course.id %}" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium shadow-md shadow-red-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Unenroll</a>
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="text-center py-5">You did not enroll in any courses.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
       </section>
       
       {% comment %} Available courses section {% endcomment %}
@@ -139,7 +189,7 @@
                       {{ course.enrolled_students.count }}
                     </td>
                     <td class="py-5">
-                      <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Enroll</a>
+                      <a href="{% url 'enroll_course' course.id %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Enroll</a>
                     </td>
                   </tr>
                 {% endfor %}

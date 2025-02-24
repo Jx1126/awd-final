@@ -26,3 +26,57 @@ def create_course(request):
     create_form = CourseForm()
 
   return render(request, 'courses/create_course.html', { 'create_form': create_form })
+
+@login_required
+def enroll_course(request, course_id):
+
+  courses = Course.objects.filter(id=course_id)
+  if not courses.exists():
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  course = courses.first()
+
+  app_user = AppUser.objects.filter(user=request.user)
+  if not app_user.exists():
+    messages.error(request, 'User does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  app_user = app_user.first()
+
+  if not app_user.is_student:
+    messages.error(request, 'Only students can enroll in courses.')
+    return HttpResponseRedirect('/user/home/')
+  
+  if app_user in course.enrolled_students.all():
+    messages.warning(request, 'You are already enrolled in this course.')
+  else:
+    course.enrolled_students.add(app_user)
+    messages.success(request, 'You have successfully enrolled in the course.')
+  
+  return HttpResponseRedirect('/user/home/')
+
+@login_required
+def unenroll_course(request, course_id):
+  courses = Course.objects.filter(id=course_id)
+
+  if not courses.exists():
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+
+  course = courses.first()
+
+  app_user = AppUser.objects.filter(user=request.user)
+  if not app_user.exists():
+    messages.error(request, 'User does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  app_user = app_user.first()
+
+  if app_user not in course.enrolled_students.all():
+    messages.warning(request, 'You are not enrolled in this course.')
+  else:
+    course.enrolled_students.remove(app_user)
+    messages.success(request, 'You have successfully unenrolled from the course.')
+
+  return HttpResponseRedirect('/user/home/')
