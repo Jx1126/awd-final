@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Create Course{% endblock %}
+
+{% block content %}
+
+  <div class="flex items-center justify-center h-screen -mt-40">
+    <div class="w-full max-w-lg p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8">
+      <form id="create_form" class="space-y-6" action="/user/course/create/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <h5 class="text-xl font-medium text-gray-900">Create Course</h5>
+        <div>
+          <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Course Title</label>
+          {% render_field create_form.course_title class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"  placeholder="Title" required="required" %}
+        </div>
+
+        <div>
+          <label for="bio" class="block mb-2 text-sm font-medium text-gray-900">Course Description</label>
+          {% render_field create_form.course_description rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Description" required="required" %}
+        </div>
+        
+        <button type="submit" class="w-full text-white bg-blue-700 shadow-md shadow-blue-500/80 hover:bg-blue-800 hover:cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Create Course</button>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

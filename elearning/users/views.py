@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from courses.models import Course
+from .models import AppUser
 
 def user_register(request):
 
@@ -76,7 +78,18 @@ def user_logout(request):
 
 @login_required
 def homepage(request):
+  try:
+    app_user = AppUser.objects.get(user=request.user) 
+  except AppUser.DoesNotExist:
+    messages.error(request, 'User not found.')
+    return render(request, 'users/login.html', {})
+  
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
+
+  if app_user.is_teacher:
+    teacher_courses = Course.objects.filter(created_by=app_user)
+  else:
+    teacher_courses = None
 
   if request.method == 'POST':
     status_form = UserStatusUpdateForm(request.POST)
@@ -91,16 +104,10 @@ def homepage(request):
     status_form = UserStatusUpdateForm()
 
   # Renders the homepage based on the user's role
-  try:
-    app_user = AppUser.objects.get(user=request.user) 
-  except AppUser.DoesNotExist:
-    messages.error(request, 'User not found.')
-    return render(request, 'users/login.html', {})
-
   if app_user.is_student:
     return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form})
   elif app_user.is_teacher:
-    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form})
+    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses})
   else:
     messages.error(request, 'Pleaes login to view this page.')
     return HttpResponseRedirect('/user/login/')
