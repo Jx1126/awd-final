@@ -87,9 +87,11 @@ def homepage(request):
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
 
   if app_user.is_teacher:
-    teacher_courses = Course.objects.filter(created_by=app_user)
+    teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
+    student_courses = None
   else:
     teacher_courses = None
+    student_courses = Course.objects.all().order_by('-time_created')
 
   if request.method == 'POST':
     status_form = UserStatusUpdateForm(request.POST)
@@ -105,7 +107,7 @@ def homepage(request):
 
   # Renders the homepage based on the user's role
   if app_user.is_student:
-    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form})
+    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses})
   elif app_user.is_teacher:
     return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses})
   else:
