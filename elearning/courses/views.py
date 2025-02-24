@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from users.models import AppUser
 from .models import Course
-from .forms import CourseForm
+from .forms import CourseForm, CourseFeedbackForm
 
 @login_required
 def create_course(request):
@@ -98,3 +98,57 @@ def delete_course(request, course_id):
   course.delete()
   messages.success(request, 'Course deleted successfully.')
   return HttpResponseRedirect('/user/home/')
+
+@login_required
+def load_feedbacks(request, course_id):
+  courses = Course.objects.filter(id=course_id)
+
+  if not courses.exists():
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+
+  course = courses.first()
+  feedbacks = course.course_feedbacks.all().order_by('-time_submitted')
+
+  app_user = AppUser.objects.filter(user=request.user).first()
+  
+  if app_user is None:
+    messages.error(request, 'User does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  feedback_form = None
+  if app_user.is_student and app_user in course.enrolled_students.all():
+    feedback_form = CourseFeedbackForm()
+    
+  return render(request, 'courses/course_feedback.html', { 'course': course, 'feedbacks': feedbacks, 'feedback_form': feedback_form })
+
+@login_required
+def submit_feedback(request, course_id):
+  courses = Course.objects.filter(id=course_id)
+
+  if not courses.exists():
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+
+  course = courses.first()
+
+  app_user = AppUser.objects.filter(user=request.user)
+  if not app_user.exists():
+    messages.error(request, 'User does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  app_user = app_user.first()
+
+  if app_user not in course.enrolled_students.all():
+    messages.error(request, 'You are not enrolled in this course.')
+    return HttpResponseRedirect('/user/home/')
+  
+  if request.method == 'POST':
+    feedback_form = CourseFeedbackForm(request.POST)
+    if feedback_form.is_valid():
+      feedback = feedback_form.save(commit=False)
+      feedback.course = course
+      feedback.student = app_user
+      feedback.save()
+      messages.success(request, 'Feedback submitted successfully.')
+      return HttpResponseRedirect(f'/user/course/{course.id}/feedback/')

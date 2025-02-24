@@ -119,6 +119,9 @@
                   View
                 </th>
                 <th scope="col" class="py-5">
+                  Feedback
+                </th>
+                <th scope="col" class="py-5">
                   Unenroll
                 </th>
               </tr>
@@ -138,6 +141,9 @@
                     </td>
                     <td class="py-5">
                       <a href="{% url 'enroll_course' course.id %}#enrolled_courses" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">View</a>
+                    </td>
+                    <td class="py-5">
+                      <a href="{% url 'course_feedback' course.id %}" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium shadow-md shadow-yellow-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Leave Feedback</a>
                     </td>
                     <td class="py-5">
                       <a href="{% url 'unenroll_course' course.id %}#enrolled_courses" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium shadow-md shadow-red-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Unenroll</a>
@@ -173,6 +179,9 @@
                 <th scope="col" class="py-5">
                   Enroll
                 </th>
+                <th scope="col" class="py-5">
+                  Feedback
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -190,6 +199,9 @@
                     </td>
                     <td class="py-5">
                       <a href="{% url 'enroll_course' course.id %}#available_courses" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Enroll</a>
+                    </td>
+                    <td class="py-5">
+                      <a href="{% url 'course_feedback' course.id %}" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium shadow-md shadow-yellow-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Read Feedbacks</a>
                     </td>
                   </tr>
                 {% endfor %}

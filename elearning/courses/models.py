@@ -10,3 +10,12 @@ class Course(models.Model):
 
   def __str__(self):
     return self.course_title
+  
+class CourseFeedback(models.Model):
+  course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_feedbacks")
+  student = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="student_feedbacks")
+  feedback_content = models.TextField()
+  time_submitted = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return f'{self.student.user.username} left a feedback for {self.course.course_title}' 
