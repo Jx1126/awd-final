@@ -80,3 +80,21 @@ def unenroll_course(request, course_id):
     messages.success(request, 'You have successfully unenrolled from the course.')
 
   return HttpResponseRedirect('/user/home/')
+
+@login_required
+def delete_course(request, course_id):
+  courses = Course.objects.filter(id=course_id)
+
+  if not courses.exists():
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+
+  course = courses.first()
+
+  if course.created_by.user != request.user:
+    messages.error(request, 'You do not have permission to delete this course.')
+    return HttpResponseRedirect('/user/home/')
+  
+  course.delete()
+  messages.success(request, 'Course deleted successfully.')
+  return HttpResponseRedirect('/user/home/')
