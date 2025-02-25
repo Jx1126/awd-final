@@ -152,3 +152,18 @@ def submit_feedback(request, course_id):
       feedback.save()
       messages.success(request, 'Feedback submitted successfully.')
       return HttpResponseRedirect(f'/user/course/{course.id}/feedback/')
+    
+@login_required
+def view_course(request, course_id):
+  course = Course.objects.filter(id=course_id).first()
+  
+  if not course:
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  app_user = AppUser.objects.get(user=request.user)
+
+  enrolled = app_user in course.enrolled_students.all()
+  creator = app_user == course.created_by
+
+  return render(request, 'courses/course_page.html', { 'course': course, 'enrolled': enrolled, 'creator': creator })

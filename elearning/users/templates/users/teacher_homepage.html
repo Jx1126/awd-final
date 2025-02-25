@@ -187,7 +187,7 @@
                     </td>
                     <td class="py-5">
                       {% if own_profile %}
-                        <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">View</a>
+                        <a href="{% url 'view_course' course.id %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">View</a>
                       {% else %}
                         <div class="cursor-not-allowed">  
                           <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-gray-400/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 pointer-events-none">View</a>
