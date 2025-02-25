@@ -85,6 +85,7 @@ def homepage(request):
     return render(request, 'users/login.html', {})
   
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
+  own_profile = (request.user == app_user.user)
 
   if app_user.is_teacher:
     teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
@@ -109,9 +110,56 @@ def homepage(request):
 
   # Renders the homepage based on the user's role
   if app_user.is_student:
-    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses})
+    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile})
   elif app_user.is_teacher:
-    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses})
+    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses, 'own_profile': own_profile})
   else:
     messages.error(request, 'Pleaes login to view this page.')
     return HttpResponseRedirect('/user/login/')
+  
+@login_required
+def search_users(request):
+  app_user = AppUser.objects.get(user=request.user)
+
+  if not app_user.is_teacher:
+    messages.error(request, 'Only teachers can search for users.')
+    return HttpResponseRedirect('/user/home/')
+  
+  query = request.GET.get('query', '')
+  query = query.strip()
+
+  if query:
+    target_user = AppUser.objects.filter(user__username=query).first()
+
+    if target_user:
+      return HttpResponseRedirect(f'/user/search/{target_user.id}/')
+    
+    messages.error(request, 'User not found.')
+
+  return HttpResponseRedirect('/user/home/')
+
+@login_required
+def show_profile(request, user_id):
+  try:
+    app_user = AppUser.objects.get(id=user_id)
+  except AppUser.DoesNotExist:
+    messages.error(request, 'User does not exist.')
+    return HttpResponseRedirect('/user/search/')
+  
+  status_list = UserStatusUpdate.objects.filter(user=app_user.user).order_by('-time_posted')
+  own_profile = (request.user == app_user.user)
+  is_student = False
+
+  if app_user.is_teacher:
+    teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
+    is_student = False
+    return render(request, 'users/teacher_homepage.html', {'app_user': app_user, 'status_list': status_list, 'teacher_courses': teacher_courses, 'own_profile': own_profile, 'is_student': is_student})
+  
+  elif app_user.is_student:
+    student_courses = Course.objects.all().order_by('-time_created')
+    enrolled_courses = app_user.enrolled_students.all()
+    is_student = True
+    return render(request, 'users/student_homepage.html', {'app_user': app_user, 'status_list': status_list, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile, 'is_student': is_student})
+  
+  messages.error(request, 'Please log in to continue.')
+  return HttpResponseRedirect('/user/login/')

@@ -7,11 +7,27 @@
 {% block content %}
   {% comment %} Page title section {% endcomment %}
   <section class="mt-5 mb-15">
-    <div class="flex justify-center">
-      <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Teacher's Homepage</h2>
-    </div>
-    <h1 class="mb-3 text-2xl font-extrabold text-gray-900 md:text-4xl lg:text-5xl">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">{{ user.username }}!</span></h1>
-    <p class="ml-5 text-lg text-gray-500 dark:text-gray-400">You are logged in as a teacher.</p>
+    {% if own_profile %}
+      <div class="flex justify-center">
+        <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Teacher's Homepage</h2>
+      </div>
+      <h1 class="mb-3 text-2xl font-extrabold text-gray-900 md:text-4xl lg:text-5xl">Welcome, <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">{{ user.username }}!</span></h1>
+      <p class="ml-5 text-lg text-gray-500 dark:text-gray-400">You are logged in as a teacher.</p>
+    {% else %}
+      <div id="profile-banner" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col md:flex-row justify-center items-center gap-5 w-auto py-4 px-10 bg-gray-100 border-b rounded-lg border-gray-200 shadow-md">
+        <div class="flex flex-col justify-center items-center">
+          <p class="text-lg font-medium text-gray-900">
+            You're viewing the profile of <span class="font-semibold text-blue-700">{{ app_user.user.username }}</span>
+            {% if is_student %}
+              <span class="text-gray-500">(Student).</span>
+            {% else %}
+              <span class="text-gray-500">(Teacher).</span>
+            {% endif %}
+          </p>
+        </div>
+          <a href="/user/home/" class="px-5 py-3 text-sm font-medium text-white bg-blue-700 shadow-md shadow-blue-500/60 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">Return to Home</a>
+      </div>
+    {% endif %}
   </section>
 
   <div class="flex flex-row gap-8">
@@ -28,12 +44,14 @@
           <li><a href="#enrolled_courses" class="hover:text-blue-700 ease-in-out transition-all">Your Courses</a></li>
           <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Back to Top</a></li>
         </ul>
-        <h5 class="text-xl font-bold leading-none text-gray-900 mt-10 mb-4">YOUR ACCOUNT</h5>
-        <ul class="max-w-md space-y-3 text-gray-500 text-lg list-none list-inside pl-4.5 dark:text-gray-400">
-          <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Update Real Name</a></li>
-          <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Update Bio</a></li>
-          <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Upload Profile Photo</a></li>
-        </ul>
+        {% if own_profile %}
+          <h5 class="text-xl font-bold leading-none text-gray-900 mt-10 mb-4">YOUR ACCOUNT</h5>
+          <ul class="max-w-md space-y-3 text-gray-500 text-lg list-none list-inside pl-4.5 dark:text-gray-400">
+            <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Update Real Name</a></li>
+            <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Update Bio</a></li>
+            <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Upload Profile Photo</a></li>
+          </ul>
+        {% endif %}
       </div>
     </section>
 
@@ -65,28 +83,30 @@
               {% else %}
                 <p class="text-gray-500 mb-8">No status updates yet.</p>
               {% endif %}
-              <div id="update_status">
-                <div class="w-full sm:min-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8">
-                  <form class="space-y-6" action="{% url 'home' %}" method="POST" id="login_form">
-                      {% csrf_token %}
-        
-                      <h5 class="text-xl font-medium text-gray-900">Update Status</h5>
-                      <div>
-                        <label for="status_title" class="block mb-2 text-sm font-medium text-gray-900">Status Title</label>
-                        {% render_field status_form.status_title class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Title" required="required" %}
-                      </div>
-        
-                      <div>
-                        <label for="status_content" class="block mb-2 text-sm font-medium text-gray-900">Status Description</label>
-                        {% render_field status_form.status_content rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Content" required="required" %}
-                      </div>
-        
-                      <div class="flex justify-center">
-                        <button type="submit" class="min-w-3xs text-white bg-blue-700 hover:bg-blue-800 hover:cursor-pointer shadow-lg ease-in-out transition shadow-blue-400/70 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Update Status</button>
-                      </div>
-                  </form>
+              {% if own_profile %}
+                <div id="update_status">
+                  <div class="w-full sm:min-w-md p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8">
+                    <form class="space-y-6" action="{% url 'home' %}" method="POST" id="login_form">
+                        {% csrf_token %}
+          
+                        <h5 class="text-xl font-medium text-gray-900">Update Status</h5>
+                        <div>
+                          <label for="status_title" class="block mb-2 text-sm font-medium text-gray-900">Status Title</label>
+                          {% render_field status_form.status_title class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Title" required="required" %}
+                        </div>
+          
+                        <div>
+                          <label for="status_content" class="block mb-2 text-sm font-medium text-gray-900">Status Description</label>
+                          {% render_field status_form.status_content rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Content" required="required" %}
+                        </div>
+          
+                        <div class="flex justify-center">
+                          <button type="submit" class="min-w-3xs text-white bg-blue-700 hover:bg-blue-800 hover:cursor-pointer shadow-lg ease-in-out transition shadow-blue-400/70 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Update Status</button>
+                        </div>
+                    </form>
+                  </div>
                 </div>
-              </div>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -95,16 +115,39 @@
       {% comment %} Search for a user section {% endcomment %}
       <section class="mb-15">
         <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Search for a User</h2>
-        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Search</button>
+        
+        <form method="GET" action="{% url 'search_users' %}" class="max-w-md mt-5">   
+          <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search by Username</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+            </div>
+            {% if own_profile %}
+              <input type="search" id="default-search" name="query" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter username.." required />
+              <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 shadow-md shadow-blue-500/70 hover:cursor-pointer transition ease-in-out focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
+              {% else %}
+              <div class="cursor-not-allowed">
+                <input type="text" id="disabled_filled" class="block w-full peer appearance-none p-4 ps-10 text-sm text-gray-900 border cursor-not-allowed  border-gray-300 rounded-lg bg-gray-50" placeholder="Enter username.." disabled />
+                <button type="submit" class="text-white absolute end-2.5 bottom-2.5 cursor-not-allowed bg-gray-400 shadow-md shadow-blue-400/50 font-medium rounded-lg text-sm px-4 py-2">Search</button>
+              </div>
+            {% endif %}
+          </div>
+        </form>
+
       </section>
 
       {% comment %} Courses section {% endcomment %}
       <section class="mb-15">
         <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Your Courses</h2>
-        <a href="/user/course/create/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-4 focus:outline-none hover:cursor-pointer ease-in-out">
-          Create New Course
-        </a>
-        
+
+        {% if own_profile %}
+          <a href="/user/course/create/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-4 focus:outline-none hover:cursor-pointer ease-in-out">Create New Course</a>
+        {% else %}
+          <div class="cursor-not-allowed w-fit">
+            <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-blue-400/50 rounded-lg text-sm px-5 py-2.5 me-2 mb-4 pointer-events-none">Create New Course</a>
+          </div>
+        {% endif %}
+        {% comment %} Couse Table {% endcomment %}
         <div class="relative overflow-x-auto shadow-md mt-5 sm:rounded-lg">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-sm text-gray-700 uppercase bg-gray-50">
@@ -143,13 +186,31 @@
                       {{ course.enrolled_students.count }}
                     </td>
                     <td class="py-5">
-                      <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">View</a>
+                      {% if own_profile %}
+                        <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">View</a>
+                      {% else %}
+                        <div class="cursor-not-allowed">  
+                          <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-gray-400/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 pointer-events-none">View</a>
+                        </div>
+                      {% endif %}
                     </td>
                     <td class="py-5">
-                      <a href="{% url 'course_feedback' course.id %}" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium shadow-md shadow-yellow-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Read Feedbacks</a>
+                      {% if own_profile %}
+                        <a href="{% url 'course_feedback' course.id %}" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium shadow-md shadow-yellow-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Read Feedbacks</a>
+                      {% else %}
+                        <div class="cursor-not-allowed">  
+                          <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-gray-400/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 pointer-events-none">Read Feedbacks</a>
+                        </div>
+                      {% endif %}
                     </td>
                     <td class="py-5">
-                      <a href="{% url 'delete_course' course.id %}" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium shadow-md shadow-red-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Delete</a>
+                      {% if own_profile %}
+                        <a href="{% url 'delete_course' course.id %}" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium shadow-md shadow-red-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Delete</a>
+                      {% else %}
+                        <div class="cursor-not-allowed">  
+                          <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-gray-400/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 pointer-events-none">Delete</a>
+                        </div>
+                      {% endif %}
                     </td>
                   </tr>
                 {% endfor %}
