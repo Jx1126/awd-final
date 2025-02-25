@@ -1,5 +1,12 @@
 from django.db import models
 from users.models import AppUser
+import uuid
+import os
+
+def generate_uuid(instance, file):
+  extension = file.split('.')[-1]
+  file_uuid = f'{uuid.uuid4()}.{extension}'
+  return os.path.join('course_materials/', file_uuid)
 
 class Course(models.Model):
   course_title = models.CharField(max_length=150)
@@ -23,8 +30,9 @@ class CourseFeedback(models.Model):
 class CourseMaterial(models.Model):
   course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_materials")
   uploaded_by = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="uploaded_by")
+  original_name = models.CharField(max_length=255, blank=True)
   title = models.CharField(max_length=150)
-  file = models.FileField(upload_to='course_materials/')
+  file = models.FileField(upload_to=generate_uuid)
   upload_time = models.DateTimeField(auto_now_add=True)
 
   def __str__(self):

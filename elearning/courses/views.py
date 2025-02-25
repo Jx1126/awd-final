@@ -208,6 +208,7 @@ def upload_course_materials(request, course_id):
       course_material = form.save(commit=False)
       course_material.course = course
       course_material.uploaded_by = app_user
+      course_material.original_name = request.FILES['file'].name
       course_material.save()
 
       process_course_materials.delay(course_id, app_user.id, course_material.title, course_material.file.path)
