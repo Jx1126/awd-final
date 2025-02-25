@@ -18,4 +18,14 @@ class CourseFeedback(models.Model):
   time_submitted = models.DateTimeField(auto_now_add=True)
 
   def __str__(self):
-    return f'{self.student.user.username} left a feedback for {self.course.course_title}' 
+    return f'{self.student.user.username} left a feedback for {self.course.course_title}'
+  
+class CourseMaterial(models.Model):
+  course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="course_materials")
+  uploaded_by = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="uploaded_by")
+  title = models.CharField(max_length=150)
+  file = models.FileField(upload_to='course_materials/')
+  upload_time = models.DateTimeField(auto_now_add=True)
+
+  def __str__(self):
+    return self.title
