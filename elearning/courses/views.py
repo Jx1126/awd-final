@@ -165,5 +165,28 @@ def view_course(request, course_id):
 
   enrolled = app_user in course.enrolled_students.all()
   creator = app_user == course.created_by
+  enrolled_students = course.enrolled_students.all()
 
-  return render(request, 'courses/course_page.html', { 'course': course, 'enrolled': enrolled, 'creator': creator })
+  return render(request, 'courses/course_page.html', { 'course': course, 'enrolled': enrolled, 'creator': creator, 'enrolled_students': enrolled_students })
+
+@login_required
+def remove_student(request, course_id, user_id):
+  course = Course.objects.filter(id=course_id).first()
+  student = AppUser.objects.filter(id=user_id).first()
+
+  if not course:
+    messages.error(request, 'Course does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  if not student:
+    messages.error(request, 'Student does not exist.')
+    return HttpResponseRedirect('/user/home/')
+  
+  if request.user != course.created_by.user:
+    messages.error(request, 'You do not have permission to remove students.')
+    return HttpResponseRedirect(f'/user/course/{course.id}/view/')
+  
+  course.enrolled_students.remove(student)
+  messages.success(request, 'Student removed successfully.')
+
+  return HttpResponseRedirect(f'/user/course/{course.id}/view/')
