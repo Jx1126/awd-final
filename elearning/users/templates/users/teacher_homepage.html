@@ -147,7 +147,7 @@
             <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-blue-400/50 rounded-lg text-sm px-5 py-2.5 me-2 mb-4 pointer-events-none">Create New Course</a>
           </div>
         {% endif %}
-        {% comment %} Couse Table {% endcomment %}
+        {% comment %} Course Table {% endcomment %}
         <div class="relative overflow-x-auto shadow-md mt-5 sm:rounded-lg">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-sm text-gray-700 uppercase bg-gray-50">
@@ -196,7 +196,7 @@
                     </td>
                     <td class="py-5">
                       {% if own_profile %}
-                        <a href="{% url 'course_feedback' course.id %}" class="text-white bg-yellow-700 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium shadow-md shadow-yellow-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Read Feedbacks</a>
+                        <a href="{% url 'course_feedback' course.id %}" class="text-white bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:ring-yellow-300 font-medium shadow-md shadow-yellow-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Read Feedbacks</a>
                       {% else %}
                         <div class="cursor-not-allowed">  
                           <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-gray-400/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 pointer-events-none">Read Feedbacks</a>
@@ -205,7 +205,7 @@
                     </td>
                     <td class="py-5">
                       {% if own_profile %}
-                        <a href="{% url 'delete_course' course.id %}" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium shadow-md shadow-red-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Delete</a>
+                        <a href="{% url 'delete_course' course.id %}" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium shadow-md shadow-red-500/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none hover:cursor-pointer ease-in-out">Delete</a>
                       {% else %}
                         <div class="cursor-not-allowed">  
                           <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-gray-400/50 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-2 pointer-events-none">Delete</a>

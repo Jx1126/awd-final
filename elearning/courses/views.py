@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from users.models import AppUser
 from .models import Course
-from .forms import CourseForm, CourseFeedbackForm
+from .forms import CourseForm, CourseFeedbackForm, CourseMaterialForm
+from .tasks import process_course_materials
 
 @login_required
 def create_course(request):
@@ -166,8 +167,9 @@ def view_course(request, course_id):
   enrolled = app_user in course.enrolled_students.all()
   creator = app_user == course.created_by
   enrolled_students = course.enrolled_students.all()
+  course_materials = course.course_materials.all().order_by('-upload_time')
 
-  return render(request, 'courses/course_page.html', { 'course': course, 'enrolled': enrolled, 'creator': creator, 'enrolled_students': enrolled_students })
+  return render(request, 'courses/course_page.html', { 'course': course, 'enrolled': enrolled, 'creator': creator, 'enrolled_students': enrolled_students, 'course_materials': course_materials })
 
 @login_required
 def remove_student(request, course_id, user_id):
@@ -189,4 +191,27 @@ def remove_student(request, course_id, user_id):
   course.enrolled_students.remove(student)
   messages.success(request, 'Student removed successfully.')
 
+  return HttpResponseRedirect(f'/user/course/{course.id}/view/')
+
+@login_required
+def upload_course_materials(request, course_id):
+  course = Course.objects.get(id=course_id)
+  app_user = AppUser.objects.get(user=request.user)
+
+  if app_user != course.created_by:
+    messages.error(request, 'You do not have permission to upload course materials.')
+    return HttpResponseRedirect(f'/user/course/{course.id}/view/')
+  
+  if request.method == "POST":
+    form = CourseMaterialForm(request.POST, request.FILES)
+    if form.is_valid():
+      course_material = form.save(commit=False)
+      course_material.course = course
+      course_material.uploaded_by = app_user
+      course_material.save()
+
+      process_course_materials.delay(course_id, app_user.id, course_material.title, course_material.file.path)
+      messages.success(request, 'Course material uploaded successfully.')
+      return HttpResponseRedirect(f'/user/course/{course.id}/view/')
+    
   return HttpResponseRedirect(f'/user/course/{course.id}/view/')

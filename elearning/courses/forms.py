@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course, CourseFeedback
+from .models import Course, CourseFeedback, CourseMaterial
 
 class CourseForm(forms.ModelForm):
   class Meta:
@@ -10,3 +10,8 @@ class CourseFeedbackForm(forms.ModelForm):
   class Meta:
     model = CourseFeedback
     fields = ['feedback_content']
+
+class CourseMaterialForm(forms.ModelForm):
+  class Meta:
+    model = CourseMaterial
+    fields = ['title', 'file']

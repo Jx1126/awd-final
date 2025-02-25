@@ -12,4 +12,5 @@ urlpatterns = [
     path('<int:course_id>/feedback/submit/', login_required(login_url='/user/login/')(courses_views.submit_feedback), name='submit_feedback'),
     path('<int:course_id>/view/', login_required(login_url='/user/login/')(courses_views.view_course), name='view_course'),
     path('<int:course_id>/remove/<int:user_id>/', login_required(login_url='/user/login/')(courses_views.remove_student), name='remove_student'),
+    path('<int:course_id>/upload/', login_required(login_url='/user/login/')(courses_views.upload_course_materials), name='upload_course_materials'),
 ]
