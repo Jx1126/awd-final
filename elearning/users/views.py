@@ -187,18 +187,20 @@ def edit_profile(request):
   app_user = AppUser.objects.get(user=request.user)
 
   if request.method == 'POST':
-    profile_form = UserProfileUpdateForm(request.POST, instance=app_user)
-    
-    if profile_form.is_valid():
+    profile_form = UserProfileUpdateForm(request.POST, request.FILES, instance=app_user)
+
+    if profile_form.is_valid(): 
       updated_profile = profile_form.save(commit=False)
       updated_profile.user = request.user
       updated_profile.save()
       messages.success(request, 'Profile updated.')
       return HttpResponseRedirect('/user/profile/')
     
-    messages.error(request, 'Error updating profile.')
-    return HttpResponseRedirect('/user/profile/')
+    else:
+      messages.error(request, 'Error updating profile. Please check your input.')
+      HttpResponseRedirect('/user/profile/edit/')
 
   else:
     profile_form = UserProfileUpdateForm(instance=app_user)
-    return render(request, 'users/edit_profile.html', {'profile_form': profile_form, 'app_user': app_user})
+  
+  return render(request, 'users/edit_profile.html', {'profile_form': profile_form, 'app_user': app_user})
