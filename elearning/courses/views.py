@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from users.models import AppUser
-from .models import Course
+from .models import Course, Notification
 from .forms import CourseForm, CourseFeedbackForm, CourseMaterialForm
 from .tasks import process_course_materials
 
@@ -54,6 +54,8 @@ def enroll_course(request, course_id):
   else:
     course.enrolled_students.add(app_user)
     messages.success(request, 'You have successfully enrolled in the course.')
+
+    Notification.objects.create(user=course.created_by, message=f'{app_user.user.username} has enrolled in your course {course.course_title}')
   
   return HttpResponseRedirect('/user/home/')
 
@@ -210,6 +212,10 @@ def upload_course_materials(request, course_id):
       course_material.uploaded_by = app_user
       course_material.original_name = request.FILES['file'].name
       course_material.save()
+
+      enrolled_students = course.enrolled_students.all()
+      for student in enrolled_students:
+        Notification.objects.create(user=student, message=f'New course material uploaded for {course.course_title} by {app_user.user.username}')
 
       process_course_materials.delay(course_id, app_user.id, course_material.title, course_material.file.path)
       messages.success(request, 'Course material uploaded successfully.')

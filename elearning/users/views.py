@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from courses.models import Course
 from .models import AppUser
+from courses.models import Notification
 
 def user_register(request):
 
@@ -86,6 +87,8 @@ def homepage(request):
   
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
   own_profile = (request.user == app_user.user)
+  notifications = Notification.objects.filter(user=app_user).order_by('-time_created')
+  notifications_count = Notification.objects.filter(user=app_user, read=False).count()
 
   if app_user.is_teacher:
     teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
@@ -110,9 +113,9 @@ def homepage(request):
 
   # Renders the homepage based on the user's role
   if app_user.is_student:
-    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile})
+    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile, 'notifications': notifications, 'notifications_count': notifications_count})
   elif app_user.is_teacher:
-    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses, 'own_profile': own_profile})
+    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses, 'own_profile': own_profile, 'notifications': notifications, 'notifications_count': notifications_count})
   else:
     messages.error(request, 'Pleaes login to view this page.')
     return HttpResponseRedirect('/user/login/')
@@ -163,3 +166,11 @@ def show_profile(request, user_id):
   
   messages.error(request, 'Please log in to continue.')
   return HttpResponseRedirect('/user/login/')
+
+@login_required
+def all_notifications(request):
+  app_user = AppUser.objects.get(user=request.user)
+  notifications = Notification.objects.filter(user=app_user).order_by('-time_created')
+  notifications.update(read=True)
+
+  return render(request, 'users/notifications.html', {'notifications': notifications})

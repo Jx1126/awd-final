@@ -37,3 +37,12 @@ class CourseMaterial(models.Model):
 
   def __str__(self):
     return self.title
+  
+class Notification(models.Model):
+  user = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="notifications")
+  message = models.TextField()
+  time_created = models.DateTimeField(auto_now_add=True)
+  read = models.BooleanField(default=False)
+
+  def __str__(self):
+    return self.message
