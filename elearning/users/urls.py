@@ -10,4 +10,5 @@ urlpatterns = [
     path('home/', login_required(login_url='login/')(user_views.homepage), name='home'),
     path('search/', login_required(login_url='login/')(user_views.search_users), name='search_users'),
     path('search/<int:user_id>/', login_required(login_url='login/')(user_views.show_profile), name='show_profile'),
+    path('notification/', login_required(login_url='login/')(user_views.all_notifications), name='all_notifications'),
 ]

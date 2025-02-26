@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Student's Homepage{% endblock %}
+
+{% block content %}
+
+<section>
+  <h2 class="my-5 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">All Notifications</h2>
+
+  {% for notification in notifications %}
+    <div class="py-5 px-8 mb-4 text-lg text-blue-800 rounded-lg bg-blue-50 w-fit shadow-md shadow-blue-500/30">
+      <span class="font-medium">Notification : </span>{{ notification.message }}
+    </div>
+  {% endfor %}
+</section>
+
+{% endblock %}
