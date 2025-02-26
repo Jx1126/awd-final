@@ -5,10 +5,8 @@ node_modules/
 elearning/static/css/output.css
 elearning/static/CACHE/
 
-media/*
-!media/course_materials/
+media
 !media/course_materials/.gitkeep
-!media/profile_photos/
 !media/profile_photos/.gitkeep
 !media/default_profile.jpg
 
