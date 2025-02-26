@@ -7,7 +7,7 @@ import os
 def generate_uuid(instance, file):
   extension = file.split('.')[-1]
   file_uuid = f'{uuid.uuid4()}.{extension}'
-  return os.path.join('course_materials/', file_uuid)
+  return os.path.join('profile_photos/', file_uuid)
 
 class AppUser(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
