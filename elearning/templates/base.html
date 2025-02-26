@@ -84,7 +84,7 @@
                   </div>
                   <ul class="max-h-56 h-auto w-full overflow-y-auto">
                     {% if notifications_count <= 0 %}
-                      <p class="px-4 py-3 text-sm text-center text-gray-500">No new notifications at the moment..</p>
+                      <p class="px-4 py-3 my-5 text-sm text-center text-gray-500">No new notifications at the moment..</p>
                     {% else %}
                       {% for notification in notifications %}
                         <li class="divide-y divide-gray-100">
@@ -108,7 +108,7 @@
 
               {% comment %} Profile Menu {% endcomment %}
               <div>
-                <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="relative inline-flex gap-2 items-center transition ease-in-out hover:cursor-pointer shadow-md shadow-blue-500/80 px-5 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
+                <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="relative inline-flex gap-2 items-center transition ease-in-out hover:cursor-pointer border bordoer-blue-700 px-5 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
                   <span class="sr-only">Open user menu</span>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"><path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" /></svg>
                   Profile
@@ -121,12 +121,12 @@
                   </div>
                   <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownUserAvatarButton">
                     <li>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100">User Profile</a>
-                      <a href="#" class="block px-4 py-2 hover:bg-gray-100">Edit Profile</a>
+                      <a href="/user/profile/" class="block px-4 py-2 hover:bg-gray-100 rounded-md">User Profile</a>
+                      <a href="/user/profile/edit/" class="block px-4 py-2 hover:bg-gray-100 rounded-md">Edit Profile</a>
                     </li>
                   </ul>
                   <div class="py-2">
-                    <a href="/user/logout/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+                    <a href="/user/logout/" class="block px-4 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100">Sign out</a>
                   </div>
                 </div>
               </div>

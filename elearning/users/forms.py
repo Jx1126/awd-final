@@ -25,3 +25,8 @@ class UserStatusUpdateForm(forms.ModelForm):
   class Meta:
     model = UserStatusUpdate
     fields = ['status_title', 'status_content']
+
+class UserProfileUpdateForm(forms.ModelForm):
+  class Meta:
+    model = AppUser
+    fields = ['real_name', 'bio']

@@ -174,3 +174,31 @@ def all_notifications(request):
   notifications.update(read=True)
 
   return render(request, 'users/notifications.html', {'notifications': notifications})
+
+@login_required
+def user_profile(request):
+  app_user = AppUser.objects.get(user=request.user)
+  own_profile = app_user.user == request.user
+
+  return render(request, 'users/user_profile.html', {'app_user': app_user, 'own_profile': own_profile})
+
+@login_required
+def edit_profile(request):
+  app_user = AppUser.objects.get(user=request.user)
+
+  if request.method == 'POST':
+    profile_form = UserProfileUpdateForm(request.POST, instance=app_user)
+    
+    if profile_form.is_valid():
+      updated_profile = profile_form.save(commit=False)
+      updated_profile.user = request.user
+      updated_profile.save()
+      messages.success(request, 'Profile updated.')
+      return HttpResponseRedirect('/user/profile/')
+    
+    messages.error(request, 'Error updating profile.')
+    return HttpResponseRedirect('/user/profile/')
+
+  else:
+    profile_form = UserProfileUpdateForm(instance=app_user)
+    return render(request, 'users/edit_profile.html', {'profile_form': profile_form, 'app_user': app_user})
