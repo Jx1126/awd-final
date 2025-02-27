@@ -108,15 +108,22 @@
 
               {% comment %} Profile Menu {% endcomment %}
               <div>
-                <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="relative inline-flex gap-2 items-center transition ease-in-out hover:cursor-pointer border bordoer-blue-700 px-5 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300" type="button">
+                <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatar" class="flex items-center p-1.5 text-sm pe-1 font-medium text-gray-900 rounded-lg hover:text-blue-600 focus:text-blue-600 md:me-0 focus:ring-4 focus:ring-gray-200/60 hover:cursor-pointer" type="button">
                   <span class="sr-only">Open user menu</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5"><path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" /></svg>
-                  Profile
+                  <div class="flex items-center justify-center gap-2 px-2">
+                    <img class="w-8 h-8 me-2 rounded-full" src="{{ user_profile.profile_photo.url }}" alt="user photo">
+                    {{ user.username }}
+                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
+                  </div>
                 </button>
                   
                 <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44 p-1">
                   <div class="px-4 py-3 text-sm text-gray-900">
-                    <div>{{ user.username}}</div>
+                    {% if user_profile.real_name %}
+                      {{ user_profile.real_name }}
+                    {% else %}
+                      {{ user.username }}
+                    {% endif %}
                     <div class="font-medium truncate">{{ user.email }}</div>
                   </div>
                   <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownUserAvatarButton">
