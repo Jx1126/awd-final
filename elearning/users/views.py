@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from courses.models import Course
 from .models import AppUser
 from courses.models import Notification
+from .tasks import process_profile_photos
 
 def user_register(request):
 
@@ -193,6 +194,10 @@ def edit_profile(request):
       updated_profile = profile_form.save(commit=False)
       updated_profile.user = request.user
       updated_profile.save()
+
+      if 'profile_photo' in request.FILES:
+        process_profile_photos.delay(updated_profile.id)
+
       messages.success(request, 'Profile updated.')
       return HttpResponseRedirect('/user/profile/')
     

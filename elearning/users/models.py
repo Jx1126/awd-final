@@ -22,6 +22,11 @@ class AppUser(models.Model):
       return self.profile_photo.url
     else:
       return f"{settings.MEDIA_URL}default_profile.jpg"
+    
+  def save(self, *args, **kwargs):
+    super().save(*args, **kwargs)
+    from .tasks import process_profile_photos
+    process_profile_photos.delay(self.id)
 
 class UserStatusUpdate(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='status_list')
