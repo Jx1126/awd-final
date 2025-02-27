@@ -88,8 +88,6 @@ def homepage(request):
   
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
   own_profile = (request.user == app_user.user)
-  notifications = Notification.objects.filter(user=app_user).order_by('-time_created')
-  notifications_count = Notification.objects.filter(user=app_user, read=False).count()
 
   if app_user.is_teacher:
     teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
@@ -114,9 +112,9 @@ def homepage(request):
 
   # Renders the homepage based on the user's role
   if app_user.is_student:
-    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile, 'notifications': notifications, 'notifications_count': notifications_count})
+    return render(request, 'users/student_homepage.html', {'status_list': status_list, 'status_form': status_form, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile})
   elif app_user.is_teacher:
-    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses, 'own_profile': own_profile, 'notifications': notifications, 'notifications_count': notifications_count})
+    return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses, 'own_profile': own_profile})
   else:
     messages.error(request, 'Pleaes login to view this page.')
     return HttpResponseRedirect('/user/login/')
