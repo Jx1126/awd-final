@@ -76,7 +76,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'elearning.wsgi.application'
+ASGI_APPLICATION = 'elearning.routing.application'
 
+ALLOWED_HOSTS = [
+  'localhost',
+  '127.0.0.1',
+  '.coursera-apps.org'
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
