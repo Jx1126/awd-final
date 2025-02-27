@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load widget_tweaks %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 my-10">Chat Room Entrance</h1>
+
+<section class="mb-5 max-w-sm w-full bg-gray-50/80 py-6 px-7 rounded-lg shadow-md">
+  <p class="text-gray-900 mb-3">Please enter room name</p>
+  
+  <div class="flex items-center max-w-sm mx-auto">   
+    <label for="input_room_name" class="sr-only">Search</label>
+    <div class="relative w-full">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-600">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none" stroke-width="1.5" stroke="currentColor" class="size-5"><path fill-rule="evenodd" d="M3.43 2.524A41.29 41.29 0 0 1 10 2c2.236 0 4.43.18 6.57.524 1.437.231 2.43 1.49 2.43 2.902v5.148c0 1.413-.993 2.67-2.43 2.902a41.202 41.202 0 0 1-5.183.501.78.78 0 0 0-.528.224l-3.579 3.58A.75.75 0 0 1 6 17.25v-3.443a41.033 41.033 0 0 1-2.57-.33C1.993 13.244 1 11.986 1 10.573V5.426c0-1.413.993-2.67 2.43-2.902Z" clip-rule="evenodd" /></svg>
+      </div>
+      <input type="text" id="input_room_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-3  " placeholder="Search room name..." required />
+    </div>
+    <button type="submit" id="search_room_name" class="p-2.5 ms-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow-sm shadow-blue-500/80 hover:cursor-pointer transition ease-in-out border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
+      <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/></svg>
+      <span class="sr-only">Search</span>
+    </button>
+  </div>
+</section>
+
+<script>
+  document.getElementById("input_room_name").focus();
+  document.getElementById("input_room_name").onkeyup = function(event) {
+    if (event.key === "Enter") {
+      document.getElementById("search_room_name").click();
+    }
+  }
+
+  document.getElementById("search_room_name").onclick = function(event) {
+    var room_name = document.getElementById("input_room_name").value;
+    if (room_name) {
+      window.location.href = "/user/chat/" + room_name + "/";
+    }
+  }
+</script>
+
+{% endblock %}  
