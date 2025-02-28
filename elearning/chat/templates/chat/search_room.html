@@ -2,7 +2,7 @@
 
 {% load widget_tweaks %}
 
-{% block title %}Chat{% endblock %}
+{% block title %}Chat Lobby{% endblock %}
 
 {% block content %}
 
@@ -37,7 +37,7 @@
   document.getElementById("search_room_name").onclick = function(event) {
     var room_name = document.getElementById("input_room_name").value;
     if (room_name) {
-      window.location.href = "/user/chat/" + room_name + "/";
+      window.location.pathname = "/user/chat/" + room_name + "/";
     }
   }
 </script>
