@@ -31,7 +31,7 @@
 <div class="flex justify-center items-center py-15">
   <div class="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm">
     <div class="flex flex-col items-center py-10">
-      <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ app_user.get_photo_url }}"/>
+      <img class="w-24 h-24 mb-3 rounded-full shadow-lg object-cover" src="{{ app_user.get_photo_url }}"/>
       <h5 class="mb-1 text-xl font-medium text-gray-900">{% if own_profile %}{{ user.username }}{% else %}{{ app_user.user.username }}{% endif %}</h5>
 
       <span class="text-sm text-gray-500">

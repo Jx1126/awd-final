@@ -110,7 +110,7 @@
                 <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatar" class="flex items-center p-1.5 text-sm pe-1 font-medium text-gray-900 rounded-lg hover:text-blue-600 focus:text-blue-600 md:me-0 focus:ring-4 focus:ring-gray-200/60 hover:cursor-pointer" type="button">
                   <span class="sr-only">Open user menu</span>
                   <div class="flex items-center justify-center gap-2 px-2">
-                    <img class="w-8 h-8 me-2 rounded-full" src="{{ user_profile.profile_photo.url }}" alt="user photo">
+                    <img class="w-8 h-8 me-2 rounded-full object-cover" src="{{ user_profile.profile_photo.url }}" alt="user photo">
                     {{ user.username }}
                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
                   </div>
