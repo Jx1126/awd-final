@@ -182,6 +182,13 @@ def user_profile(request):
   return render(request, 'users/user_profile.html', {'app_user': app_user, 'own_profile': own_profile})
 
 @login_required
+def show_information(request, user_id):
+  app_user = AppUser.objects.get(user=user_id)
+  own_profile = app_user.user == request.user
+
+  return render(request, 'users/user_profile.html', {'app_user': app_user, 'own_profile': own_profile})
+
+@login_required
 def edit_profile(request):
   app_user = AppUser.objects.get(user=request.user)
 

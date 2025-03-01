@@ -25,6 +25,7 @@
             {% endif %}
           </p>
         </div>
+          <a href="{% url 'show_information' app_user.id %}" class="px-5 py-3 text-sm font-medium transition ease-in-out border-2 text-blue-700 hover:text-white bg-transparent hover:bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-300">View Profile</a>
           <a href="/user/home/" class="px-5 py-3 text-sm font-medium text-white bg-blue-700 shadow-md shadow-blue-500/60 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300">Return to Home</a>
       </div>
     {% endif %}
@@ -40,16 +41,16 @@
         <ul class="max-w-md space-y-3 text-gray-500 text-lg list-none list-inside pl-4.5 dark:text-gray-400">
           <li><a href="#status_display" class="hover:text-blue-700 ease-in-out transition-all">User Status</a></li>
           <li><a href="#update_status" class="hover:text-blue-700 ease-in-out transition-all">Update Status</a></li>
-          <li><a href="#upcoming_deadlines" class="hover:text-blue-700 ease-in-out transition-all">Create Courses</a></li>
-          <li><a href="#enrolled_courses" class="hover:text-blue-700 ease-in-out transition-all">Your Courses</a></li>
+          <li><a href="#search_profile" class="hover:text-blue-700 ease-in-out transition-all">Search Profile</a></li>
+          <li><a href="#create_courses" class="hover:text-blue-700 ease-in-out transition-all">Create Courses</a></li>
+          <li><a href="#your_courses" class="hover:text-blue-700 ease-in-out transition-all">Your Courses</a></li>
           <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Back to Top</a></li>
         </ul>
         {% if own_profile %}
           <h5 class="text-xl font-bold leading-none text-gray-900 mt-10 mb-4">YOUR ACCOUNT</h5>
           <ul class="max-w-md space-y-3 text-gray-500 text-lg list-none list-inside pl-4.5 dark:text-gray-400">
-            <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Update Real Name</a></li>
-            <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Update Bio</a></li>
-            <li><a href="#" class="hover:text-blue-700 ease-in-out transition-all">Upload Profile Photo</a></li>
+            <li><a href="/user/profile/" class="hover:text-blue-700 ease-in-out transition-all">Your Profile</a></li>
+            <li><a href="/user/profile/edit/" class="hover:text-blue-700 ease-in-out transition-all">Edit Profile</a></li>
           </ul>
         {% endif %}
       </div>
@@ -113,7 +114,7 @@
       </section>
 
       {% comment %} Search for a user section {% endcomment %}
-      <section class="mb-15">
+      <section id="search_profile" class="mb-15">
         <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Search for a User</h2>
         
         <form method="GET" action="{% url 'search_users' %}" class="max-w-md mt-5">   
@@ -141,14 +142,14 @@
         <h2 class="mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl lg:text-3xl">Your Courses</h2>
 
         {% if own_profile %}
-          <a href="/user/course/create/" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-4 focus:outline-none hover:cursor-pointer ease-in-out">Create New Course</a>
+          <a href="/user/course/create/" id="create_courses" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium shadow-md shadow-blue-500/70 transition rounded-lg text-sm px-5 py-2.5 me-2 mb-4 focus:outline-none hover:cursor-pointer ease-in-out">Create New Course</a>
         {% else %}
           <div class="cursor-not-allowed w-fit">
             <a href="#" class="text-white bg-gray-400 font-medium shadow-md shadow-blue-400/50 rounded-lg text-sm px-5 py-2.5 me-2 mb-4 pointer-events-none">Create New Course</a>
           </div>
         {% endif %}
         {% comment %} Course Table {% endcomment %}
-        <div class="relative overflow-x-auto shadow-md mt-5 sm:rounded-lg">
+        <div id="your_courses" class="relative overflow-x-auto shadow-md mt-5 sm:rounded-lg">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-sm text-gray-700 uppercase bg-gray-50">
               <tr>
