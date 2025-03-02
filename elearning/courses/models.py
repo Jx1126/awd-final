@@ -3,6 +3,7 @@ from users.models import AppUser
 import uuid
 import os
 
+# Generate unique filenames for course materials
 def generate_uuid(instance, file):
   extension = file.split('.')[-1]
   file_uuid = f'{uuid.uuid4()}.{extension}'
@@ -32,6 +33,7 @@ class CourseMaterial(models.Model):
   uploaded_by = models.ForeignKey(AppUser, on_delete=models.CASCADE, related_name="uploaded_by")
   original_name = models.CharField(max_length=255, blank=True)
   title = models.CharField(max_length=150)
+  # Generate the unique filename for the uploaded file
   file = models.FileField(upload_to=generate_uuid)
   upload_time = models.DateTimeField(auto_now_add=True)
 
