@@ -72,7 +72,8 @@
                   Notifications
                   {% if notifications_count > 0 %}
                     <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2">
-                      {{ notifications_count }}
+                      <div class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-60"></div>
+                      <span class="relative text-xs font-bold">{{ notifications_count }}</span>
                     </div>
                   {% endif %}
                 </button>
