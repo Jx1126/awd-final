@@ -16,6 +16,8 @@ def create_course(request):
     messages.error(request, 'Only teachers can create courses.')
     return HttpResponseRedirect('/user/home/')
   
+  create_form = None
+
   if request.method == 'POST':
     form = CourseForm(request.POST)
     # Create a new course if the form is valid
