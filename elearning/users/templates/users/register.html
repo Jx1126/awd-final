@@ -7,9 +7,11 @@
 
   <div class="flex items-center justify-center h-screen">
     <div class="w-full max-w-lg p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8">
+      <!-- Registration Form -->
       <form id="user_form" class="space-y-6" action="/user/register/" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
+          <!-- User Information Input -->
           <h5 class="text-xl font-medium text-gray-900">Account Registration</h5>
           <div>
             <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Username</label>
@@ -26,12 +28,14 @@
             {% render_field user_form.password class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="••••••••" required="required" %}
           </div>
           
+          <!-- App User Profile Setup -->
           <h5 class="text-xl font-medium text-gray-900">Profile Setup</h5>
           <div>
             <label for="real_name" class="block mb-2 text-sm font-medium text-gray-900">Real Name</label>
             {% render_field profile_form.real_name class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="John Smith" required="required" %}
           </div>
 
+          <!-- User Role Radio -->
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900">User Role</label>
               <div class="flex flex-row gap-3">
@@ -49,7 +53,10 @@
             {% render_field profile_form.bio rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your bio.." required="required" %}
           </div>
           
+          <!-- Register Button -->
           <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 hover:cursor-pointer focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Register your account</button>
+          
+          <!-- Login Link -->
           <div class="text-sm font-medium text-gray-500">
               Already have an account? <a href="/user/login/" class="text-blue-700 hover:underline">Login</a>
           </div>

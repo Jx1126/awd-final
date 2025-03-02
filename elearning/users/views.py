@@ -10,7 +10,6 @@ from courses.models import Notification
 from .tasks import process_profile_photos
 
 def user_register(request):
-
   if request.method == 'POST':
     # Get the data from the forms
     user_form = UserForm(data=request.POST)
@@ -23,10 +22,11 @@ def user_register(request):
         user.set_password(user.password)
         user.save()
 
+        # Save the profile data
         profile = profile_form.save(commit=False)
         profile.user = user
 
-        # Check if the user is a student or teacher
+        # Set the user role
         user_role = profile_form.cleaned_data['user_role']
         if user_role == 'student':
           profile.is_student = True
@@ -53,10 +53,13 @@ def user_register(request):
 
 def user_login(request):
   if request.method == 'POST':
+    # Get data from the form
     username = request.POST['username']
     password = request.POST['password']
+    # Authenticate the user
     user = authenticate(username=username, password=password)
 
+    # Login the user if the user exists and is active
     if user:
       if user.is_active:
         login(request, user)
@@ -74,6 +77,7 @@ def user_login(request):
 
 @login_required
 def user_logout(request):
+  # Log the user out
   logout(request)
   messages.success(request, 'You have successfully logged out.')
   return HttpResponseRedirect('/user/login/')
@@ -86,9 +90,12 @@ def homepage(request):
     messages.error(request, 'User not found.')
     return render(request, 'users/login.html', {})
   
+  # Retrieve the user's status updates
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
+  # Check if the user is the owner of the profile
   own_profile = (request.user == app_user.user)
 
+  # Display the different courses section based on the user's role
   if app_user.is_teacher:
     teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
     student_courses = None
@@ -98,6 +105,7 @@ def homepage(request):
     student_courses = Course.objects.all().order_by('-time_created')
     enrolled_courses = app_user.enrolled_students.all()
 
+  # Handle the user status update request
   if request.method == 'POST':
     status_form = UserStatusUpdateForm(request.POST)
     if status_form.is_valid():
@@ -108,6 +116,7 @@ def homepage(request):
       return HttpResponseRedirect('/user/home/')
 
   else:
+    # Create the status form
     status_form = UserStatusUpdateForm()
 
   # Renders the homepage based on the user's role
@@ -127,12 +136,14 @@ def search_users(request):
     messages.error(request, 'Only teachers can search for users.')
     return HttpResponseRedirect('/user/home/')
   
+  # Get the request query and strip it
   query = request.GET.get('query', '')
   query = query.strip()
 
+  # Redirect to the user's profile if the user exists
   if query:
     target_user = AppUser.objects.filter(user__username=query).first()
-
+    
     if target_user:
       return HttpResponseRedirect(f'/user/search/{target_user.id}/')
     
@@ -148,10 +159,13 @@ def show_profile(request, user_id):
     messages.error(request, 'User does not exist.')
     return HttpResponseRedirect('/user/search/')
   
+  # Retrieve the user's status updates
   status_list = UserStatusUpdate.objects.filter(user=app_user.user).order_by('-time_posted')
+  # Check if the user is the owner of the profile
   own_profile = (request.user == app_user.user)
   is_student = False
 
+  # Display the different courses section based on the user's role
   if app_user.is_teacher:
     teacher_courses = Course.objects.filter(created_by=app_user).order_by('-time_created')
     is_student = False
@@ -168,14 +182,17 @@ def show_profile(request, user_id):
 
 @login_required
 def all_notifications(request):
+  # Return all the notifications for the user
   app_user = AppUser.objects.get(user=request.user)
   notifications = Notification.objects.filter(user=app_user).order_by('-time_created')
+  # Set all the notifications to read
   notifications.update(read=True)
 
   return render(request, 'users/notifications.html', {'notifications': notifications})
 
 @login_required
 def user_profile(request):
+  # Retrieve the user's profile information of the logged in user
   app_user = AppUser.objects.get(user=request.user)
   own_profile = app_user.user == request.user
 
@@ -183,6 +200,7 @@ def user_profile(request):
 
 @login_required
 def show_information(request, user_id):
+  # Retrieve the user's profile information based on the user ID
   app_user = AppUser.objects.get(user=user_id)
   own_profile = app_user.user == request.user
 
@@ -196,10 +214,12 @@ def edit_profile(request):
     profile_form = UserProfileUpdateForm(request.POST, request.FILES, instance=app_user)
 
     if profile_form.is_valid(): 
+      # Save the updated profile information
       updated_profile = profile_form.save(commit=False)
       updated_profile.user = request.user
       updated_profile.save()
 
+      # Process the profile photo asynchronously if it's submitted
       if 'profile_photo' in request.FILES:
         process_profile_photos.delay(updated_profile.id)
 
@@ -211,6 +231,7 @@ def edit_profile(request):
       HttpResponseRedirect('/user/profile/edit/')
 
   else:
+    # Create the profile form
     profile_form = UserProfileUpdateForm(instance=app_user)
   
   return render(request, 'users/edit_profile.html', {'profile_form': profile_form, 'app_user': app_user})

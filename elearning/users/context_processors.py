@@ -1,6 +1,7 @@
 from .models import AppUser
 from courses.models import Notification
 
+# Make variables available globally
 def global_data(request):
   notifications_count = 0
   notifications = []

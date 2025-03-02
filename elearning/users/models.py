@@ -4,6 +4,7 @@ from django.conf import settings
 import uuid
 import os
 
+# Generate unique filenames for profile photo
 def generate_uuid(instance, file):
   extension = file.split('.')[-1]
   file_uuid = f'{uuid.uuid4()}.{extension}'
@@ -15,14 +16,17 @@ class AppUser(models.Model):
   is_teacher = models.BooleanField(default=False)
   real_name = models.CharField(max_length=150)
   bio = models.TextField(blank=True)
+  # Set the default profile photo
   profile_photo = models.ImageField(upload_to=generate_uuid, null=True, blank=True, default='default_profile.jpg')
 
+  # Get the URL of the profile photo
   def get_photo_url(self):
     if self.profile_photo:
       return self.profile_photo.url
     else:
       return f"{settings.MEDIA_URL}default_profile.jpg"
     
+  # Save the processed profile photo
   def save(self, *args, **kwargs):
     super().save(*args, **kwargs)
     from .tasks import process_profile_photos
