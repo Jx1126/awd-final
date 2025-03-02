@@ -8,14 +8,16 @@
 
 <div class="flex justify-center items-center flex-col w-full">
 
-  <div class="flex justify-center items-center">
+  <!-- Chat Room Header Section -->
+  <section class="flex justify-center items-center">
     <h1 class="text-2xl font-semibold text-gray-900 my-10">Chat: {{ room_name }}</h1>
-  </div>
+  </section>
 
-  <div id="message_log" class="mb-10 mx-4 py-10 px-14 w-1/2 min-h-96 max-h-96 overflow-y-scroll text-sm text-gray-900 bg-white/50 rounded-lg border border-gray-300 shadow-md">
-      
-  </div>
+  <!-- Chat Messages Section -->
+  <section id="message_log" class="mb-10 mx-4 py-10 px-14 w-1/2 min-h-96 max-h-96 overflow-y-scroll text-sm text-gray-900 bg-white/50 rounded-lg border border-gray-300 shadow-md">
+  </section>
 
+  <!-- Chat Message Input Section -->
   <label for="input_message" class="sr-only">Your message</label>
   <div class="flex items-center px-2 py-4 mb-10 w-1/2 rounded-lg bg-gray-50 shadow-md">
     <textarea id="input_message" rows="1" class="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"  placeholder="Your message..."></textarea>
@@ -27,20 +29,24 @@
 
 </div>
 
+<!-- Pass the room name to the Javascript as JSON -->
 {{ room_name|json_script:"room-name" }}
 
 <script>
+  // Get the chat room name from the JSON script
   const chat_room_name = JSON.parse(document.getElementById("room-name").textContent);
-  console.log('Connecting to WebSocket at ws://' + window.location.host + '/ws/user/chat/' + chat_room_name + '/');
+  // Create a new WebSocket connection to the chat room
   const chat_socket = new WebSocket('ws://' + window.location.host + '/ws/user/chat/' + chat_room_name + '/');
 
   chat_socket.onmessage = function(event) {
+    // Parse the incoming message JSON
     const data = JSON.parse(event.data);
     const message_log = document.getElementById("message_log");
 
+    // Create a HTML div container
     const message = document.createElement("div");
     message.classList.add("p-1.5", "rounded-lg", "max-w-xl"  );
-
+    // Set the inner HTML of the message container to include the message data
     message.innerHTML = `
       <div class="flex gap-3 mb-2">
         <img class="w-8 h-8 rounded-full ring-2 ring-gray-500 object-cover" src="${data.profile_photo_url}">
@@ -54,7 +60,9 @@
       </div>
     `;
     
+    // Added the message to the message log
     message_log.appendChild(message);
+    // Scroll to the bottom to show the latest message
     message_log.scrollTop = message_log.scrollHeight;
   }
 
@@ -62,6 +70,7 @@
     console.error('Chat socket closed unexpectedly');
   }
 
+  // Click the send message button when the user presses the Enter key
   document.getElementById("input_message").focus();
   document.getElementById("input_message").onkeyup = function(event) {
     if (event.key === "Enter") {
@@ -72,9 +81,12 @@
   document.getElementById("send_message").onclick = function(event) {
     const message_dom = document.getElementById("input_message");
     const message = message_dom.value;
+
+    // Convert the message into string format then send it to the chat socket
     chat_socket.send(JSON.stringify({
       'message': message
     }));
+    // Clear the message input
     message_dom.value = '';
   }
 </script>
