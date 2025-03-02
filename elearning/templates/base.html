@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}eLearning Platform{% endblock %}</title>
 
+  <!-- TailwindCSS -->
   {% compress css %}
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
   {% endcompress %}
@@ -16,7 +17,7 @@
 
 <body class="bg-white">
 
-  {% comment %} Toast Messages {% endcomment %}
+  <!-- Alert Toasts -->
   {% if messages %}
     <div class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-xs">
       {% for message in messages %}
@@ -34,7 +35,7 @@
 
           <div class="ms-3 text-sm font-medium">{{ message }}</div>
 
-          {% comment %} Toast Close Button {% endcomment %}
+          <!-- Dismiss Toasts Button -->
           <button type="button" class="ms-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2 p-1.5 inline-flex items-center justify-center h-8 w-8 hover:cursor-pointer transition ease-in-out
             {% if message.tags == 'success' %}
               bg-green-50 text-green-500 focus:ring-green-400 hover:bg-green-200
@@ -53,10 +54,11 @@
     </div>
   {% endif %}
 
-  {% comment %} Header Navigation Bar {% endcomment %}
+  <!-- Navigation Bar -->
   <header>
     <nav class="bg-white/50 border-gray-200 px-4 lg:px-6 py-2.5 mx-10 sm:mx-24 md:mx-36 lg:mx-48 shadow-sm rounded-lg mt-5">
       <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+        <!-- Logo Section -->
         <a {% if user.is_authenticated %} href="/user/home/" {% else %} href="#" {% endif %} class="flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M168,40.58V32A24,24,0,0,0,144,8H112A24,24,0,0,0,88,32v8.58A56.09,56.09,0,0,0,40,96V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V96A56.09,56.09,0,0,0,168,40.58ZM112,24h32a8,8,0,0,1,8,8v8H104V32A8,8,0,0,1,112,24Zm56,136H88v-8a8,8,0,0,1,8-8h64a8,8,0,0,1,8,8ZM88,176h48v8a8,8,0,0,0,16,0v-8h16v40H88Zm112,40H184V152a24,24,0,0,0-24-24H96a24,24,0,0,0-24,24v64H56V96A40,40,0,0,1,96,56h64a40,40,0,0,1,40,40V216ZM152,88a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,88Z"></path></svg>
           <span class="self-center text-xl font-semibold whitespace-nowrap">eLearn</span>
@@ -64,12 +66,14 @@
         <div class="flex items-center lg:order-2">
           {% if user.is_authenticated %}
             <div class="flex justify-end gap-3">
-              {% comment %} Notification Dropdown {% endcomment %}
+              <!-- Notification Section -->
               <div>
+                <!-- Notification Button -->
                 <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification" class="relative inline-flex items-center transition ease-in-out hover:cursor-pointer px-5 py-3 text-sm font-medium text-center text-blue-700 bg-transparent border border-blue-700 hover:bg-blue-700 rounded-lg focus:ring-4 focus:outline-none focus:ring-blue-300 hover:text-white">
                   <svg class="w-5 h-5 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 14 20"><path d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z"/></svg>
                   <span class="sr-only">Notifications</span>
                   Notifications
+                  <!-- Notification Count -->
                   {% if notifications_count > 0 %}
                     <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2">
                       <div class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-60"></div>
@@ -77,11 +81,13 @@
                     </div>
                   {% endif %}
                 </button>
-    
+                
+                <!-- Notification Dropdown -->
                 <div id="dropdownNotification" class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow-sm" aria-labelledby="dropdownNotificationButton">
                   <div class="block px-4 py-2 font-medium text-center text-gray-700 rounded-t-lg bg-gray-50">
                     Notifications
                   </div>
+                  <!-- Notification List -->
                   <ul class="max-h-56 h-auto w-full overflow-y-auto">
                     {% if notifications_count <= 0 %}
                       <p class="px-4 py-3 my-5 text-sm text-center text-gray-500">No new notifications at the moment..</p>
@@ -97,6 +103,7 @@
                       {% endfor %}
                     {% endif %}
                   </ul>
+                  <!-- View All Notification -->
                   <a href="/user/notification/" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100">
                     <div class="inline-flex items-center">
                       <svg class="w-4 h-4 me-2 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14"><path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/></svg>
@@ -106,8 +113,9 @@
                 </div>
               </div>
 
-              {% comment %} Profile Menu {% endcomment %}
+              <!-- User Menu Section -->
               <div>
+                <!-- User Menu Button -->
                 <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatar" class="flex items-center p-1.5 text-sm pe-1 font-medium text-gray-900 rounded-lg hover:text-blue-600 focus:text-blue-600 md:me-0 focus:ring-4 focus:ring-gray-200/60 hover:cursor-pointer" type="button">
                   <span class="sr-only">Open user menu</span>
                   <div class="flex items-center justify-center gap-2 px-2">
@@ -116,7 +124,8 @@
                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/></svg>
                   </div>
                 </button>
-                  
+                
+                <!-- User Menu Dropdown -->
                 <div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44 p-1">
                   <div class="px-4 py-3 text-sm text-gray-900">
                     {% if user_profile.real_name %}
@@ -126,6 +135,7 @@
                     {% endif %}
                     <div class="font-medium truncate">{{ user.email }}</div>
                   </div>
+                  <!-- User Menu List -->
                   <ul class="py-2 text-sm text-gray-700" aria-labelledby="dropdownUserAvatarButton">
                     <li>
                       <a href="/user/profile/" class="block px-4 py-2 hover:bg-gray-100 rounded-md">User Profile</a>
@@ -139,6 +149,7 @@
               </div>
             </div>
           {% else %}
+            <!-- Authentication Button Section -->
             <a href="/user/login/" class="text-gray-800 hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm me-2 lg:px-5 py-3 px-5 lg:py-2.5 mr-2 focus:outline-none">Log in</a>
             <a href="/user/register/" class="px-5 py-3 me-2 text-sm font-medium text-white bg-blue-700 rounded-lg shadow-lg ease-in-out transition shadow-blue-400/70 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none">Get started</a>
           {% endif %}
@@ -147,14 +158,14 @@
       </nav>
   </header>
 
-  {% comment %} Background Blobs {% endcomment %}
+  <!-- Background Blobs -->
   <div class="fixed inset-0 -z-10 overflow-hidden">
     <div class="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full blur-3xl opacity-20"></div>
     <div class="absolute top-1/3 right-20 w-96 h-96 bg-cyan-500 rounded-full blur-3xl opacity-15"></div>
     <div class="absolute bottom-20 left-1/4 w-80 h-80 bg-yellow-500 rounded-full blur-2xl opacity-15"></div>
   </div>
 
-  {% comment %} Message Button {% endcomment %}
+  <!-- Message Button Section -->
   {% if user.is_authenticated %}
     <a href="/user/chat/" class="fixed right-10 bottom-10 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg shadow-md shadow-blue-500/70 text-md px-8 py-4 z-100 transition ease-in-out text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6 me-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" /></svg>
@@ -162,17 +173,18 @@
     </a>
   {% endif %}
 
-  {% comment %} Main contents {% endcomment %}
+  <!-- Main HTML Contents -->
   <main class="mx-10 sm:mx-24 md:mx-36 lg:mx-48">
     {% block content %}
     {% endblock %}
   </main>
 
+  <!-- Footer -->
   <footer class="bg-white/50 rounded-lg shadow-sm mx-10 mb-5 sm:mx-24 md:mx-36 lg:mx-48 flex items-center justify-center">
     <span class="text-sm text-gray-500 sm:text-center p-5">© 2025 <a href="https://github.com/Jx1126" class="hover:underline">Wong Jin Xuan</a>. All Rights Reserved.</span>
   </footer>
 
-  {% comment %} Flowbite Javascripts {% endcomment %}
+  <!-- Flowbite Javascript -->
   {% compress js %}
     <script src="{% static 'js/flowbite.min.js' %}"></script>
   {% endcompress %}
