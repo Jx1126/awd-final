@@ -4,6 +4,7 @@ from users.models import AppUser, UserStatusUpdate
 from users.serializers import AppUserSerializer, UserStatusUpdateSerializer
 from courses.models import Course, CourseFeedback, CourseMaterial, Notification
 from courses.serializers import CourseSerializer, CourseFeedbackSerializer, CourseMaterialSerializer, NotificationSerializer
+from .permissions import IsTeacher, IsStudent
 
 # Retrieve the user profile information
 class UserProfileView(generics.RetrieveAPIView):
@@ -22,7 +23,7 @@ class UserStatusUpdateView(generics.ListAPIView):
     return UserStatusUpdate.objects.filter(user=self.request.user).order_by('-time_posted')
   
 class UserEnrolledCoursesView(generics.ListAPIView):
-  permission_classes = [permissions.IsAuthenticated]
+  permission_classes = [permissions.IsAuthenticated, IsStudent]
   serializer_class = CourseSerializer
 
   def get_queryset(self):
@@ -38,7 +39,7 @@ class UserNotificationView(generics.ListAPIView):
     return Notification.objects.filter(user=app_user).order_by('-time_created')
   
 class UserCreatedCoursesView(generics.ListAPIView):
-  permission_classes = [permissions.IsAuthenticated]
+  permission_classes = [permissions.IsAuthenticated, IsTeacher]
   serializer_class = CourseSerializer
 
   def get_queryset(self):
