@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from .forms import *
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -9,86 +8,13 @@ from .models import AppUser
 from courses.models import Notification
 from .tasks import process_profile_photos
 
-def user_register(request):
-  if request.method == 'POST':
-    # Get the data from the forms
-    user_form = UserForm(data=request.POST)
-    profile_form = UserProfileForm(data=request.POST)
-
-    if user_form.is_valid() and profile_form.is_valid():
-      try:
-        # Save the user data and profile to the database
-        user = user_form.save()
-        user.set_password(user.password)
-        user.save()
-
-        # Save the profile data
-        profile = profile_form.save(commit=False)
-        profile.user = user
-
-        # Set the user role
-        user_role = profile_form.cleaned_data['user_role']
-        if user_role == 'student':
-          profile.is_student = True
-        elif user_role == 'teacher':
-          profile.is_teacher = True
-
-        # Save the profile data to the database
-        profile.save()
-        messages.success(request, 'You have successfully registered.')
-        return HttpResponseRedirect('/user/login/')
-      
-      except Exception as e:
-        messages.error(request, f'Error: {e}')
-    
-    else:
-      messages.error(request, 'Username taken. Please choose another username.')
-
-  else:
-    # Create the forms
-    user_form = UserForm()
-    profile_form = UserProfileForm()
-
-  return render(request, 'users/register.html', {'user_form': user_form, 'profile_form': profile_form})
-
-def user_login(request):
-  if request.method == 'POST':
-    # Get data from the form
-    username = request.POST['username']
-    password = request.POST['password']
-    # Authenticate the user
-    user = authenticate(username=username, password=password)
-
-    # Login the user if the user exists and is active
-    if user:
-      if user.is_active:
-        login(request, user)
-        messages.success(request, 'You have successfully logged in.')
-        return HttpResponseRedirect('/user/home/')
-      else:
-        messages.error(request, 'This account is disabled.')
-        return render(request, 'users/login.html', {})
-    else:
-      messages.error(request, 'Invalid login.')
-      return render(request, 'users/login.html', {})
-
-  else:
-    return render(request, 'users/login.html', {})
-
-@login_required
-def user_logout(request):
-  # Log the user out
-  logout(request)
-  messages.success(request, 'You have successfully logged out.')
-  return HttpResponseRedirect('/user/login/')
-
 @login_required
 def homepage(request):
   try:
     app_user = AppUser.objects.get(user=request.user) 
   except AppUser.DoesNotExist:
     messages.error(request, 'User not found.')
-    return render(request, 'users/login.html', {})
+    return render(request, 'authentication/login.html', {})
   
   # Retrieve the user's status updates
   status_list = UserStatusUpdate.objects.filter(user=request.user).order_by('-time_posted')
@@ -126,7 +52,7 @@ def homepage(request):
     return render(request, 'users/teacher_homepage.html', {'status_list': status_list, 'status_form': status_form, 'teacher_courses': teacher_courses, 'own_profile': own_profile})
   else:
     messages.error(request, 'Pleaes login to view this page.')
-    return HttpResponseRedirect('/user/login/')
+    return HttpResponseRedirect('/auth/login/')
   
 @login_required
 def search_users(request):
@@ -178,7 +104,7 @@ def show_profile(request, user_id):
     return render(request, 'users/student_homepage.html', {'app_user': app_user, 'status_list': status_list, 'student_courses': student_courses, 'enrolled_courses': enrolled_courses, 'own_profile': own_profile, 'is_student': is_student})
   
   messages.error(request, 'Please log in to continue.')
-  return HttpResponseRedirect('/user/login/')
+  return HttpResponseRedirect('/auth/login/')
 
 @login_required
 def all_notifications(request):
