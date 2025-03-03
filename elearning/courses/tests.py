@@ -126,4 +126,35 @@ class TestCourses(TestCase):
     # Check if the course material was uploaded
     self.assertEqual(self.course.course_materials.count(), 1)
     self.assertEqual(self.course.course_materials.last().title, 'Test Material')
-    
+  
+  # Courses Test 10: Teachers can receive a notification when students enroll in their course
+  def test_enrollment_notification_function(self):
+    # Login as a student
+    self.client.login(username='student_1', password='abcd')
+    # Unenroll the student from the course
+    response = self.client.get('/user/course/unenroll/1/')
+    self.assertEqual(response.status_code, 302)
+    self.assertEqual(response.url, '/user/home/')
+    # Re-enroll the student in the course
+    response = self.client.get('/user/course/enroll/1/')
+    self.assertEqual(response.status_code, 302)
+    self.assertEqual(response.url, '/user/home/')
+    # Check if a notification was created for the teacher
+    self.assertEqual(Notification.objects.count(), 1)
+    self.assertEqual(Notification.objects.last().user, self.course.created_by)
+    self.assertEqual(Notification.objects.last().message, 'student_1 has enrolled in your course Test Course')
+
+  # Courses Test 11: Students can receive a notification when new course materials are uploaded
+  def test_upload_notification_function(self):
+    # Login as a teacher
+    self.client.login(username='teacher_1', password='abcd')
+    # Create a placeholder test file
+    test_file = SimpleUploadedFile('test_file.pdf', b'test_file_content', content_type='application/pdf')
+    # Upload the test file as a course material
+    response = self.client.post('/user/course/1/upload/', {'title': 'Test Material', 'file': test_file})
+    self.assertEqual(response.status_code, 302)
+    self.assertEqual(response.url, '/user/course/1/view/')
+    # Check if a notification was created for the enrolled students
+    self.assertEqual(Notification.objects.count(), 1)
+    self.assertEqual(Notification.objects.last().user, self.student_app_user)
+    self.assertEqual(Notification.objects.last().message, 'New course material uploaded for Test Course by teacher_1')
