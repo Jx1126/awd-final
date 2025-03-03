@@ -123,6 +123,7 @@ class TestUser(TestCase):
     # Check if the page redirects correctly
     self.assertEqual(response.status_code, 302)
     self.assertEqual(response.url, '/user/profile/')
+    # Refresh the database to get the updated profile
     self.student_app_user.refresh_from_db()
     # Check if the profile was edited
     self.assertEqual(self.student_app_user.real_name, 'Updated Student One')
