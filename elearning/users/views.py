@@ -2,11 +2,12 @@ from django.shortcuts import render
 from .forms import *
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from courses.models import Course
 from .models import AppUser
 from courses.models import Notification
 from .tasks import process_profile_photos
+from api.permissions import is_teacher, is_student
 
 @login_required
 def homepage(request):
@@ -78,6 +79,7 @@ def search_users(request):
   return HttpResponseRedirect('/user/home/')
 
 @login_required
+@user_passes_test(is_teacher, login_url='/user/home/')
 def show_profile(request, user_id):
   try:
     app_user = AppUser.objects.get(id=user_id)
@@ -125,6 +127,7 @@ def user_profile(request):
   return render(request, 'users/user_profile.html', {'app_user': app_user, 'own_profile': own_profile})
 
 @login_required
+@user_passes_test(is_teacher, login_url='/user/home/')
 def show_information(request, user_id):
   # Retrieve the user's profile information based on the user ID
   app_user = AppUser.objects.get(user=user_id)

@@ -2,13 +2,15 @@ from django.shortcuts import render
 from .forms import *
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from users.models import AppUser
 from .models import Course, Notification
 from .forms import CourseForm, CourseFeedbackForm, CourseMaterialForm
 from .tasks import process_course_materials
+from api.permissions import is_teacher, is_student
 
 @login_required
+@user_passes_test(is_teacher, login_url='/user/home/')
 def create_course(request):
   user_role = AppUser.objects.get(user=request.user)
   # Send an error message if the user is not a teacher
@@ -33,6 +35,7 @@ def create_course(request):
   return render(request, 'courses/create_course.html', { 'create_form': create_form })
 
 @login_required
+@user_passes_test(is_student, login_url='/user/home/')
 def enroll_course(request, course_id):
   courses = Course.objects.filter(id=course_id)
   # Check if the course exists
@@ -69,6 +72,7 @@ def enroll_course(request, course_id):
   return HttpResponseRedirect('/user/home/')
 
 @login_required
+@user_passes_test(is_student, login_url='/user/home/')
 def unenroll_course(request, course_id):
   courses = Course.objects.filter(id=course_id)
 
@@ -98,6 +102,7 @@ def unenroll_course(request, course_id):
   return HttpResponseRedirect('/user/home/')
 
 @login_required
+@user_passes_test(is_teacher, login_url='/user/home/')
 def delete_course(request, course_id):
   courses = Course.objects.filter(id=course_id)
 
@@ -144,6 +149,7 @@ def load_feedbacks(request, course_id):
   return render(request, 'courses/course_feedback.html', { 'course': course, 'feedbacks': feedbacks, 'feedback_form': feedback_form })
 
 @login_required
+@user_passes_test(is_student, login_url='/user/home/')
 def submit_feedback(request, course_id):
   courses = Course.objects.filter(id=course_id)
 
@@ -196,6 +202,7 @@ def view_course(request, course_id):
   return render(request, 'courses/course_page.html', { 'course': course, 'enrolled': enrolled, 'creator': creator, 'enrolled_students': enrolled_students, 'course_materials': course_materials })
 
 @login_required
+@user_passes_test(is_teacher, login_url='/user/home/')
 def remove_student(request, course_id, user_id):
   # Get the course and student
   course = Course.objects.filter(id=course_id).first()
@@ -221,6 +228,7 @@ def remove_student(request, course_id, user_id):
   return HttpResponseRedirect(f'/user/course/{course.id}/view/')
 
 @login_required
+@user_passes_test(is_teacher, login_url='/user/home/')
 def upload_course_materials(request, course_id):
   course = Course.objects.get(id=course_id)
   app_user = AppUser.objects.get(user=request.user)
