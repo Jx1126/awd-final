@@ -1,32 +1,35 @@
 from django import forms
-from django.forms import ModelForm
-from .models import *
+from .models import AppUser, UserStatusUpdate
 from django.contrib.auth.models import User
 
-class UserForm(forms.ModelForm):
-  password = forms.CharField(widget=forms.PasswordInput())
 
-  class Meta:
-    model = User
-    fields = ('username', 'email', 'password')
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password")
+
 
 class UserProfileForm(forms.ModelForm):
-  user_role_radio = (
-    ('student', 'Student'),
-    ('teacher', 'Teacher'),
-  )
-  user_role = forms.ChoiceField(choices=user_role_radio, widget=forms.RadioSelect)
+    user_role_radio = (
+        ("student", "Student"),
+        ("teacher", "Teacher"),
+    )
+    user_role = forms.ChoiceField(choices=user_role_radio, widget=forms.RadioSelect)
 
-  class Meta:
-    model = AppUser
-    fields = ('real_name', 'user_role', 'bio')
+    class Meta:
+        model = AppUser
+        fields = ("real_name", "user_role", "bio")
+
 
 class UserStatusUpdateForm(forms.ModelForm):
-  class Meta:
-    model = UserStatusUpdate
-    fields = ['status_title', 'status_content']
+    class Meta:
+        model = UserStatusUpdate
+        fields = ["status_title", "status_content"]
+
 
 class UserProfileUpdateForm(forms.ModelForm):
-  class Meta:
-    model = AppUser
-    fields = ['real_name', 'bio', 'profile_photo']
+    class Meta:
+        model = AppUser
+        fields = ["real_name", "bio", "profile_photo"]

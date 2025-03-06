@@ -1,12 +1,9 @@
 from __future__ import absolute_import
 
 import os
-import time
-
 from celery import Celery
-from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'elearning.settings')
-app = Celery('elearning')
-app.config_from_object('django.conf:settings', namespace='CELERY')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "elearning.settings")
+app = Celery("elearning")
+app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
