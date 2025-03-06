@@ -75,11 +75,11 @@ Celery is used to handle background tasks, while Redis serves as the message bro
 2.	**Start Celery Worker**
     -	Starts Celery (Windows):
     ```powershell
-      celery -A elearning –loglevel=info -P threads
+      celery -A elearning worker --loglevel=info -P threads
     ```
     -	Starts Celery for other OS:
     ```powershell
-      celery -A elearning –loglevel=info 
+      celery -A elearning worker --loglevel=info
     ```
 <br />
 
