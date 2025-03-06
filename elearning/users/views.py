@@ -188,7 +188,7 @@ def user_profile(request):
 @user_passes_test(is_teacher, login_url="/user/home/")
 def show_information(request, user_id):
     # Retrieve the user's profile information based on the user ID
-    app_user = AppUser.objects.get(user=user_id)
+    app_user = AppUser.objects.get(id=user_id)
     own_profile = app_user.user == request.user
 
     return render(
