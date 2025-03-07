@@ -38,11 +38,11 @@ To set up and run the application, follow these steps:
     - Extract the eLearning project from the ZIP file to any location.
 
 2. **Navigate to the Project Directory** 
-   Open a terminal and change the directory into the project folder:
+    - Open a terminal and change the directory into the project folder:
   ```powershell
     cd elearning
   ```
-3. **Install Required Dependencies**
+1. **Install Required Dependencies**
     -	Install required Python packages using requirement.txt:
   ```powershell
     pip install -r requirements.txt
